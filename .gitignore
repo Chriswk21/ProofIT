@@ -1,0 +1,8 @@
+# Backend
+backend-ProofIt/.env
+backend-ProofIt/node_modules/
+
+# Frontend
+Proof-It-app/.dart_tool/
+Proof-It-app/.packages
+Proof-It-app/build/
