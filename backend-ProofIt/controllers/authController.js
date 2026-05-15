@@ -26,7 +26,8 @@ const login = async (req, res) => {
       });
     }
 
-    // JWT Token
+    // Buat JWT Token
+    // Kita payload ID dan email agar di frontend/middleware bisa digunakan
     const token = jwt.sign(
       { userId: data.id, email: data.email, role: data.role },
       process.env.JWT_SECRET || 'rahasia_default_jangan_dipakai_di_production',

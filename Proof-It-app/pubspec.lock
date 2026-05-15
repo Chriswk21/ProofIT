@@ -465,15 +465,6 @@ packages:
     source: hosted
     version: "0.28.0"
   shared_preferences:
-<<<<<<< HEAD
-    dependency: transitive
-    description:
-      name: shared_preferences
-      sha256: "6e8bf70b7fef813df4e9a36f658ac46d107db4b4cfe1048b477d4e453a8159f5"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.5.3"
-=======
     dependency: "direct main"
     description:
       name: shared_preferences
@@ -481,7 +472,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.5.5"
->>>>>>> 5d1adbc9be4ad852af394d9aa75779d630143884
   shared_preferences_android:
     dependency: transitive
     description:
@@ -752,10 +742,5 @@ packages:
     source: hosted
     version: "2.1.0"
 sdks:
-<<<<<<< HEAD
-  dart: ">=3.9.0-0 <4.0.0"
-  flutter: ">=3.32.0"
-=======
   dart: ">=3.9.0 <4.0.0"
   flutter: ">=3.35.0"
->>>>>>> 5d1adbc9be4ad852af394d9aa75779d630143884

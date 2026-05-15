@@ -20,7 +20,7 @@ class ApiLogin {
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
         if (responseData['status'] == 'success') {
-        
+          // Simpan token dan data user ke SharedPreferences
           final prefs = await SharedPreferences.getInstance();
           if (responseData['token'] != null) {
             await prefs.setString('jwt_token', responseData['token']);
