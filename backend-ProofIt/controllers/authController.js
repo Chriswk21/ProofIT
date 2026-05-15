@@ -1,4 +1,5 @@
 const supabase = require('../supabaseClient.js');
+const jwt = require('jsonwebtoken');
 
 const login = async (req, res) => {
   try {
@@ -25,9 +26,17 @@ const login = async (req, res) => {
       });
     }
 
+    // JWT Token
+    const token = jwt.sign(
+      { userId: data.id, email: data.email, role: data.role },
+      process.env.JWT_SECRET || 'rahasia_default_jangan_dipakai_di_production',
+      { expiresIn: '7d' } // Token berlaku 7 hari
+    );
+
     return res.status(200).json({
       status: 'success',
       user: data,
+      token: token,
     });
 
   } catch (err) {

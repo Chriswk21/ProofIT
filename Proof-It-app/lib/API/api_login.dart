@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'app_config.dart';
 
 class ApiLogin {
@@ -19,6 +20,13 @@ class ApiLogin {
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
         if (responseData['status'] == 'success') {
+        
+          final prefs = await SharedPreferences.getInstance();
+          if (responseData['token'] != null) {
+            await prefs.setString('jwt_token', responseData['token']);
+          }
+          await prefs.setString('user_data', jsonEncode(responseData['user']));
+
           return responseData['user'];
         } else {
           return null; 

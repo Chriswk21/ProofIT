@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:main/API/api_notification.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../data/mock_database.dart';
@@ -8,7 +8,7 @@ import 'dashboard_page.dart';
 import 'roadmap_page.dart';
 import 'team_page.dart';
 import 'notifications_page.dart';
-import 'package:main/API/api_service.dart';
+//import 'package:main/API/api_service.dart';
 
 class MainLayout extends StatefulWidget {
   final int initialIndex;
@@ -127,7 +127,6 @@ class _MainLayoutState extends State<MainLayout> {
             value: userId,
           ),
           callback: (payload) {
-          
             if (mounted) _refreshNotifications();
             _showNotificationSnackBar(payload.newRecord);
           },
@@ -235,10 +234,18 @@ class _MainLayoutState extends State<MainLayout> {
                   itemBuilder: (c) => [
                     PopupMenuItem(
                       child: const Text("Logout"),
-                      onTap: () => Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (_) => const LoginScreen()),
-                      ),
+                      onTap: () async {
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.clear();
+                        if (mounted) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const LoginScreen(),
+                            ),
+                          );
+                        }
+                      },
                     ),
                   ],
                 ),
@@ -246,7 +253,6 @@ class _MainLayoutState extends State<MainLayout> {
             ),
           ),
 
-          
           Expanded(
             child: IndexedStack(
               index: _idx,

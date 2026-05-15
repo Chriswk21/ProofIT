@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Backend
 backend-ProofIt/.env
 backend-ProofIt/node_modules/
@@ -6,3 +7,61 @@ backend-ProofIt/node_modules/
 Proof-It-app/.dart_tool/
 Proof-It-app/.packages
 Proof-It-app/build/
+=======
+# ========================
+# OS & IDE Files
+# ========================
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.log
+
+# ========================
+# Backend (Node.js)
+# ========================
+backend-ProofIt/node_modules/
+backend-ProofIt/dist/
+backend-ProofIt/build/
+backend-ProofIt/.env
+backend-ProofIt/.env.*
+!backend-ProofIt/.env.example
+backend-ProofIt/npm-debug.log*
+backend-ProofIt/yarn-debug.log*
+backend-ProofIt/yarn-error.log*
+backend-ProofIt/coverage/
+
+# ========================
+# Frontend (Flutter)
+# ========================
+# Flutter/Dart/Pub related
+Proof-It-app/.dart_tool/
+Proof-It-app/.flutter-plugins
+Proof-It-app/.flutter-plugins-dependencies
+Proof-It-app/.packages
+Proof-It-app/.pub-cache/
+Proof-It-app/.pub/
+Proof-It-app/build/
+
+# Native platform build folders
+Proof-It-app/android/.gradle/
+Proof-It-app/android/local.properties
+Proof-It-app/android/app/debug/
+Proof-It-app/android/app/profile/
+Proof-It-app/android/app/release/
+Proof-It-app/ios/Flutter/.last_build_id
+Proof-It-app/ios/Pods/
+Proof-It-app/ios/.symlinks/
+Proof-It-app/macos/Flutter/ephemeral/
+Proof-It-app/windows/flutter/ephemeral/
+Proof-It-app/linux/flutter/ephemeral/
+
+# Exceptions to above native platform ignores
+!Proof-It-app/android/app/src/main/AndroidManifest.xml
+!Proof-It-app/ios/Runner/Info.plist
+
+# Symbolication / Obfuscation
+Proof-It-app/app.*.symbols
+Proof-It-app/app.*.map.json
+>>>>>>> 5d1adbc9be4ad852af394d9aa75779d630143884
