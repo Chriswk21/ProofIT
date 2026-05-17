@@ -1,0 +1,48 @@
+# OS & IDE Files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.log
+
+# General 
+node_modules/
+.env
+.env.*
+!.env.example
+build/
+dist/
+coverage/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Flutter / Dart (Frontend)
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+
+# Native Platform Build Folders
+android/.gradle/
+android/local.properties
+android/app/debug/
+android/app/profile/
+android/app/release/
+ios/Flutter/.last_build_id
+ios/Pods/
+ios/.symlinks/
+macos/Flutter/ephemeral/
+windows/flutter/ephemeral/
+linux/flutter/ephemeral/
+
+# Pengecualian
+!android/app/src/main/AndroidManifest.xml
+!ios/Runner/Info.plist
+
+# Symbolication / Obfuscation
+app.*.symbols
+app.*.map.json
