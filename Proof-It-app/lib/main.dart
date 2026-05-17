@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide User;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'pages/welcome_screen.dart'; 
 import 'pages/login_screen.dart';
 import 'pages/main_layout.dart';
 import 'data/mock_database.dart';
@@ -16,8 +17,7 @@ void main() async {
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwYWljbHR4Y3l6dWx1Y2lpZHBlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5NDkwNzAsImV4cCI6MjA4ODUyNTA3MH0.05Jpe9ky62Jsyzolea499_AXDBBU3s10v0WvcYPoqD4',
   );
 
-  // Cek sesi tersimpan
-  Widget initialScreen = const LoginScreen();
+  Widget initialScreen = const WelcomeScreen();
   try {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('jwt_token');
@@ -41,7 +41,7 @@ void main() async {
       initialScreen = const MainLayout();
     }
   } catch (e) {
-    // Abaikan jika error, fallback ke LoginScreen
+    print("Error checking session: $e");
   }
 
   runApp(ProofItApp(initialScreen: initialScreen));
