@@ -1,5 +1,3 @@
-// lib/screens/dashboard_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:main/API/api_service.dart';
@@ -16,8 +14,7 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   late Future<List<Map<String, dynamic>>> _projectsFuture;
 
-  // 1. Variabel State untuk menyimpan filter yang sedang aktif
-  String _selectedFilter = 'Total'; // Pilihan: 'Total', 'Active', 'Completed'
+  String _selectedFilter = 'Total';
 
   @override
   void initState() {
@@ -27,7 +24,6 @@ class _DashboardPageState extends State<DashboardPage> {
 
   void _fetchProjects() {
     setState(() {
-      // PERBAIKAN: Penulisan kurung pada (data) yang benar
       _projectsFuture = ApiService.getProjects().then(
         (data) => List<Map<String, dynamic>>.from(data),
       );
@@ -120,15 +116,21 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             ElevatedButton(
               onPressed: () async {
+                if (title.text.trim().isEmpty || desc.text.trim().isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Title dan Description wajib diisi!")),
+                  );
+                  return; 
+                }
+
                 try {
-                  // MENGGUNAKAN FORMAT TANGGAL STRING UNTUK EXPRESS.JS
                   bool success = await ApiService.addProject(
-                    title.text,
-                    desc.text,
+                    title.text.trim(),
+                    desc.text.trim(),
                     status,
-                    loc.text,
-                    DateTime.now().toIso8601String(), // Start date
-                    date.toIso8601String(), // End date
+                    loc.text.trim(),
+                    DateTime.now().toIso8601String(),
+                    date.toIso8601String(),
                   );
 
                   if (success && mounted) {
@@ -148,19 +150,6 @@ class _DashboardPageState extends State<DashboardPage> {
               },
               child: const Text("Create"),
             ),
-            ElevatedButton(
-              onPressed: () async {
-                print("Mencoba menyambungkan ke backend...");
-                var data = await ApiService.getProjects();
-
-                if (data.isEmpty) {
-                  print("Berhasil nyambung, tapi data project kosong.");
-                } else {
-                  print("Berhasil nyambung! Data: $data");
-                }
-              },
-              child: const Text("Test Koneksi Backend"),
-            ),
           ],
         ),
       ),
@@ -178,17 +167,44 @@ class _DashboardPageState extends State<DashboardPage> {
           return const Center(child: CircularProgressIndicator());
         }
 
+        if (snapshot.hasError) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error_outline, color: Colors.red, size: 50),
+                  const SizedBox(height: 10),
+                  Text(
+                    "Gagal memuat data dari database:\n${snapshot.error}",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+
         final rawData = snapshot.data ?? [];
 
         final List<EventModel> allEvents = rawData.map((row) {
+          DateTime parsedDate;
+          try {
+            parsedDate = row['end_date'] != null
+                ? DateTime.parse(row['end_date'].toString())
+                : DateTime.now();
+          } catch (e) {
+            parsedDate = DateTime.now();
+          }
+
           return EventModel(
-            row['id'].toString() ?? '',
+            row['id']?.toString() ?? '',
             row['title']?.toString() ?? 'No Title',
             row['description']?.toString() ?? '',
             row['status']?.toString() ?? 'Upcoming',
-            row['end_date'] != null
-                ? DateTime.parse(row['end_date'].toString())
-                : DateTime.now(),
+            parsedDate,
             row['location']?.toString() ?? '',
             'pic@test.com',
             [],
@@ -440,10 +456,9 @@ class _DashboardPageState extends State<DashboardPage> {
                   icon: const Icon(Icons.delete, size: 20, color: Colors.grey),
                   onPressed: () async {
                     try {
-                      // PERBAIKAN: Penulisan async await untuk API Service Delete
                       bool isSuccess = await ApiService.deleteProject(e.id);
                       if (isSuccess) {
-                        _fetchProjects(); // Refresh UI setelah sukses hapus
+                        _fetchProjects(); 
                       } else {
                         throw Exception("Gagal menghapus di server");
                       }
