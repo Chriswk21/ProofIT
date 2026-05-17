@@ -4,14 +4,22 @@ import 'app_config.dart';
 
 class RoadmapApiService {
   static String get baseUrl => '${AppConfig.baseUrl}/roadmap';
-
   Future<Map<String, dynamic>> fetchRoadmap(String userId, String role) async {
-    final uri = Uri.parse('$baseUrl?userId=$userId&role=$role');
-    final response = await http.get(uri);
+    final uri = Uri.parse(baseUrl).replace(queryParameters: {
+      'userId': userId,
+      'role': role,
+    });
+
+    final response = await http.get(uri, headers: {'Accept': 'application/json'});
 
     if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+      final decoded = jsonDecode(response.body);
+      if (decoded is Map<String, dynamic>) return decoded;
+      // If backend unexpectedly returns a list, wrap into map
+      if (decoded is List) return {'projects': decoded, 'tasks': []};
+      return {};
     } else {
+      print('fetchRoadmap failed: ${response.statusCode} - ${response.body}');
       throw Exception('Gagal ambil data roadmap (${response.statusCode}): ${response.body}');
     }
   }

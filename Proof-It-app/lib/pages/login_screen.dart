@@ -44,9 +44,10 @@ class _LoginScreenState extends State<LoginScreen> {
           role: roleEnum,
         );
         if (mounted) {
-          Navigator.pushReplacement(
+          Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (_) => const MainLayout()),
+            (route) => false,
           );
         }
       } else {

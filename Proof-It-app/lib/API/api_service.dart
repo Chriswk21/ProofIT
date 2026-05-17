@@ -1,21 +1,32 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'app_config.dart';
 
 class ApiService {
-  static const String baseUrl = 'http://localhost:3000/api';
-
+  static String get baseUrl => '${AppConfig.baseUrl}/projects';
   // 1. GET PROJECTS
   static Future<List<dynamic>> getProjects() async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl/projects'));
+      final uri = Uri.parse(baseUrl);
+      final response = await http.get(uri, headers: {'Accept': 'application/json'});
+
       if (response.statusCode == 200) {
-        return json.decode(response.body);
+        final decoded = jsonDecode(response.body);
+        // If backend returns an object with a list inside, try to extract it
+        if (decoded is List) return decoded;
+        if (decoded is Map) {
+          if (decoded['data'] is List) return decoded['data'];
+          if (decoded['projects'] is List) return decoded['projects'];
+          // If it's a single object, wrap into list
+          return [decoded];
+        }
+        return [];
       } else {
-        print("Error Fetch status: ${response.statusCode} - ${response.body}");
+        print('getProjects error: ${response.statusCode} - ${response.body}');
         return [];
       }
     } catch (e) {
-      print("Error Fetch: $e");
+      print('getProjects exception: $e');
       return [];
     }
   }
@@ -30,19 +41,26 @@ class ApiService {
     String endDate,
   ) async {
     try {
+      final uri = Uri.parse(baseUrl);
+      final body = jsonEncode({
+        "title": title,
+        "description": desc,
+        "status": status,
+        "location": location,
+        "start_date": startDate,
+        "end_date": endDate,
+      });
+
       final response = await http.post(
-        Uri.parse('$baseUrl/projects'),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode({
-          "title": title,
-          "description": desc,
-          "status": status,
-          "location": location,
-          "start_date": startDate,
-          "end_date": endDate,
-        }),
+        uri,
+        headers: {"Content-Type": "application/json", "Accept": "application/json"},
+        body: body,
       );
-      return response.statusCode == 201;
+
+      if (response.statusCode == 201) return true;
+
+      print('addProject failed: ${response.statusCode} - ${response.body}');
+      return false;
     } catch (e) {
       print("Error Add: $e");
       return false;

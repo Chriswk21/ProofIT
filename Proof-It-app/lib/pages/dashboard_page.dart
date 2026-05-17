@@ -292,7 +292,7 @@ class _DashboardPageState extends State<DashboardPage> {
               Row(
                 children: [
                   _statCard(
-                    "Total Projects",
+                    "All Projects",
                     "$totalCount",
                     Colors.blue,
                     Icons.folder,

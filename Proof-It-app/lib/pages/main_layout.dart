@@ -240,9 +240,10 @@ class _MainLayoutState extends State<MainLayout> {
                         final prefs = await SharedPreferences.getInstance();
                         await prefs.clear();
                         if (mounted) {
-                          Navigator.pushReplacement(
+                          Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(builder: (_) => const LoginScreen()),
+                            (route) => false,
                           );
                         }
                       },

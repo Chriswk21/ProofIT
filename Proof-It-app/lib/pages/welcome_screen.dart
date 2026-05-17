@@ -46,7 +46,7 @@ class WelcomeScreen extends StatelessWidget {
                 height: 55,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).push(_createSlideUpRoute());
+                    Navigator.of(context).pushReplacement(_createSlideUpRoute());
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
