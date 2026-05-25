@@ -18,10 +18,10 @@ exports.getAllUsers = async (req, res) => {
 // 2. Create User
 exports.createUser = async (req, res) => {
     try {
-        const { username, email, password_hash, role } = req.body;
+        const { username, email, password, role } = req.body;
         const { data, error } = await supabase
             .from('users')
-            .insert([{ username, email, password_hash, role }])
+            .insert([{ username, email, password, role }])
             .select();
 
         if (error) throw error;
