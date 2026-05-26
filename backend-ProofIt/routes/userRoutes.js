@@ -4,6 +4,7 @@ const userController = require('../controllers/userController');
 const authController = require('../controllers/authController');
 
 router.post('/login', authController.login);
+router.get('/debug-db', userController.debugDb);
 
 router.get('/', userController.getAllUsers);
 router.post('/', userController.createUser);

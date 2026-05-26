@@ -63,3 +63,39 @@ exports.deleteUser = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+// 5. Debug Database (Untuk melihat isi kolom & daftar user terdaftar secara aman)
+exports.debugDb = async (req, res) => {
+    try {
+        const { data: users, error: usersError } = await supabase
+            .from('users')
+            .select('*');
+
+        if (usersError) {
+            return res.status(500).json({
+                error: 'Gagal mengambil data dari tabel users',
+                message: usersError.message,
+                details: usersError
+            });
+        }
+
+        const safeUsers = users.map(u => {
+            const keys = Object.keys(u);
+            return {
+                id: u.id,
+                username: u.username,
+                email: u.email,
+                role: u.role,
+                available_columns: keys
+            };
+        });
+
+        res.status(200).json({
+            message: 'Koneksi Supabase Sukses!',
+            total_users: users.length,
+            users: safeUsers
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
