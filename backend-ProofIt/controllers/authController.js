@@ -9,7 +9,7 @@ const login = async (req, res) => {
       .from('users')
       .select('*')
       .eq('email', email)
-      .eq('password', password)
+      .eq('password_hash', password)
       .maybeSingle();
 
     if (error) {

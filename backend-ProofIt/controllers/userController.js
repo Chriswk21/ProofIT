@@ -21,7 +21,7 @@ exports.createUser = async (req, res) => {
         const { username, email, password, role } = req.body;
         const { data, error } = await supabase
             .from('users')
-            .insert([{ username, email, password, role }])
+            .insert([{ username, email, password_hash: password, role }])
             .select();
 
         if (error) throw error;
@@ -67,6 +67,13 @@ exports.deleteUser = async (req, res) => {
 // 5. Debug Database (Untuk melihat isi kolom & daftar user terdaftar secara aman)
 exports.debugDb = async (req, res) => {
     try {
+        // Query user spesifik ardi@pixelforge.com
+        const { data: ardiData, error: ardiError } = await supabase
+            .from('users')
+            .select('*')
+            .eq('email', 'ardi@pixelforge.com')
+            .maybeSingle();
+
         const { data: users, error: usersError } = await supabase
             .from('users')
             .select('*');
@@ -93,7 +100,16 @@ exports.debugDb = async (req, res) => {
         res.status(200).json({
             message: 'Koneksi Supabase Sukses!',
             total_users: users.length,
-            users: safeUsers
+            users: safeUsers,
+            debug_ardi: ardiData ? {
+                id: ardiData.id,
+                username: ardiData.username,
+                email: ardiData.email,
+                password_hash_value: ardiData.password_hash,
+                password_hash_length: ardiData.password_hash ? ardiData.password_hash.length : 0,
+                // Check for hidden whitespace characters
+                password_hash_chars: ardiData.password_hash ? ardiData.password_hash.split('') : []
+            } : 'User ardi@pixelforge.com tidak ditemukan di database!'
         });
     } catch (err) {
         res.status(500).json({ error: err.message });
